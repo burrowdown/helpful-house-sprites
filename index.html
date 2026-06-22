@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Helpful House Sprites — Cleaning, Organizing &amp; Lawn Care</title>
+    <meta
+      name="description"
+      content="Helpful House Sprites tidy, organize, and tend the gardens of homes across the Willowbrook area — a little everyday magic for your home."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Nunito+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Demo admin panel: mix your own palette. Intentionally minimal styling.
+         Each row sets one seed color; style.css derives the rest. -->
+    <div class="theme-admin">
+      <div class="theme-admin__row" role="group" aria-label="Background color">
+        <span class="theme-admin__label">Background</span>
+        <label>
+          <input type="radio" name="bg" value="#f7f4ec" checked />
+          <span class="swatch" style="background: #f7f4ec"></span> Cream
+        </label>
+        <label>
+          <input type="radio" name="bg" value="#f7eef0" />
+          <span class="swatch" style="background: #f7eef0"></span> Blush
+        </label>
+        <label>
+          <input type="radio" name="bg" value="#f3eee4" />
+          <span class="swatch" style="background: #f3eee4"></span> Beige
+        </label>
+        <label>
+          <input type="radio" name="bg" value="#eef1f4" />
+          <span class="swatch" style="background: #eef1f4"></span> Mist
+        </label>
+        <label>
+          <input type="radio" name="bg" value="#eef1ea" />
+          <span class="swatch" style="background: #eef1ea"></span> Sage tint
+        </label>
+      </div>
+
+      <div class="theme-admin__row" role="group" aria-label="Primary color">
+        <span class="theme-admin__label">Primary</span>
+        <label>
+          <input type="radio" name="primary" value="#6f8169" checked />
+          <span class="swatch" style="background: #6f8169"></span> Sage
+        </label>
+        <label>
+          <input type="radio" name="primary" value="#6a8299" />
+          <span class="swatch" style="background: #6a8299"></span> Dusty blue
+        </label>
+        <label>
+          <input type="radio" name="primary" value="#b97c8c" />
+          <span class="swatch" style="background: #b97c8c"></span> Dusty rose
+        </label>
+        <label>
+          <input type="radio" name="primary" value="#8a6a86" />
+          <span class="swatch" style="background: #8a6a86"></span> Plum
+        </label>
+        <label>
+          <input type="radio" name="primary" value="#b0836a" />
+          <span class="swatch" style="background: #b0836a"></span> Clay
+        </label>
+      </div>
+
+      <div class="theme-admin__row" role="group" aria-label="Accent color">
+        <span class="theme-admin__label">Accent</span>
+        <label>
+          <input type="radio" name="accent" value="#c75f7e" checked />
+          <span class="swatch" style="background: #c75f7e"></span> Pink
+        </label>
+        <label>
+          <input type="radio" name="accent" value="#a85f6e" />
+          <span class="swatch" style="background: #a85f6e"></span> Rose
+        </label>
+        <label>
+          <input type="radio" name="accent" value="#c25f81" />
+          <span class="swatch" style="background: #c25f81"></span> Berry
+        </label>
+        <label>
+          <input type="radio" name="accent" value="#57684f" />
+          <span class="swatch" style="background: #57684f"></span> Sage
+        </label>
+        <label>
+          <input type="radio" name="accent" value="#4e6275" />
+          <span class="swatch" style="background: #4e6275"></span> Blue
+        </label>
+      </div>
+
+      <div class="theme-admin__row" role="group" aria-label="Footer color">
+        <span class="theme-admin__label">Footer</span>
+        <label>
+          <input type="radio" name="footer" value="#2c2e2b" checked />
+          <span class="swatch" style="background: #2c2e2b"></span> Charcoal
+        </label>
+        <label>
+          <input type="radio" name="footer" value="#2b333d" />
+          <span class="swatch" style="background: #2b333d"></span> Navy
+        </label>
+        <label>
+          <input type="radio" name="footer" value="#41566b" />
+          <span class="swatch" style="background: #41566b"></span> Slate blue
+        </label>
+        <label>
+          <input type="radio" name="footer" value="#2f3a30" />
+          <span class="swatch" style="background: #2f3a30"></span> Forest
+        </label>
+        <label>
+          <input type="radio" name="footer" value="#3a3133" />
+          <span class="swatch" style="background: #3a3133"></span> Warm brown
+        </label>
+      </div>
+    </div>
+
+    <!-- Sticky navigation -->
+    <header class="nav" id="top">
+      <div class="nav__inner">
+        <a class="nav__brand" href="#top">
+          Helpful House <span class="nav__amp">Sprites</span>
+        </a>
+        <button
+          class="nav__toggle"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+          aria-label="Toggle navigation menu"
+        >
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="nav__menu" id="nav-menu" aria-label="Primary">
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#testimonials">Testimonials</a>
+          <a class="nav__cta" href="#contact">Get in touch</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero__inner">
+          <p class="eyebrow">A little everyday magic</p>
+          <h1 class="hero__title">You deserve a happy house.</h1>
+          <p class="hero__lede">
+            The Helpful House Sprites want to help you create a cleaner, calmer,
+            more functional home. Services available in the greater Portland
+            area.
+          </p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#contact">Invite the sprites</a>
+            <a class="btn btn--ghost" href="#services">What we do</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section class="section" id="about">
+        <div class="section__head">
+          <p class="eyebrow">About us</p>
+          <h2 class="section__title">Meet the sprites</h2>
+          <p class="section__intro">
+            Every home is looked after by our two seasoned sprites
+          </p>
+        </div>
+
+        <div class="profiles">
+          <article class="profile">
+            <div class="profile__avatar" aria-hidden="true">avatar</div>
+            <h3 class="profile__name">Sunshine</h3>
+            <p class="profile__role">Role · byline · both</p>
+            <p class="profile__bio">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
+              sunt ad quaerat quam praesentium consectetur porro? Illum iure
+              repudiandae quod voluptatem veritatis iusto, corporis consectetur
+              non libero neque quos aliquam.
+            </p>
+          </article>
+
+          <article class="profile">
+            <div class="profile__avatar" aria-hidden="true">avatar</div>
+            <h3 class="profile__name">I forgot your name</h3>
+            <p class="profile__role">Role · byline · both</p>
+            <p class="profile__bio">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
+              sunt ad quaerat quam praesentium consectetur porro? Illum iure
+              repudiandae quod voluptatem veritatis iusto, corporis consectetur
+              non libero neque quos aliquam.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Services -->
+      <section class="section section--alt" id="services">
+        <div class="section__head">
+          <p class="eyebrow">Services</p>
+          <h2 class="section__title">Three kinds of household magic</h2>
+          <p class="section__intro">
+            Call on one, or invite the whole troupe — most homes start with a
+            single visit and keep us flitting back.
+          </p>
+        </div>
+
+        <div class="services">
+          <article class="card">
+            <div class="card__icon" aria-hidden="true">✦</div>
+            <h3 class="card__title">A Spotless Home</h3>
+            <p class="card__body">
+              Top-to-bottom cleaning that reaches the corners everyone forgets —
+              kitchens, baths, floors, and all. Book a one-time sparkle or a
+              recurring visit, and come home to a house that practically hums.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card__icon" aria-hidden="true">❖</div>
+            <h3 class="card__title">Everything in Its Place</h3>
+            <p class="card__body">
+              From a single closet to a whole-home reset, we sort, declutter,
+              and conjure up systems you can actually keep. We bring the bins,
+              the labels, and a quiet sense of order that lingers after we go.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card__icon" aria-hidden="true">✿</div>
+            <h3 class="card__title">A Happy Garden</h3>
+            <p class="card__body">
+              Mowing, edging, seasonal tidying, and a little extra fondness for
+              the beds and borders. We keep your grounds looking sharp so the
+              outside of your home is every bit as welcoming as the inside.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Testimonials -->
+      <section class="section" id="testimonials">
+        <div class="section__head">
+          <p class="eyebrow">Testimonials</p>
+          <h2 class="section__title">Hear from happy homes</h2>
+        </div>
+
+        <div class="quotes">
+          <figure class="quote">
+            <blockquote>
+              "Sunshine is reliable and thorough, I love having someone I can
+              trust to take care of my home."
+            </blockquote>
+            <figcaption>— Danny B.</figcaption>
+          </figure>
+
+          <figure class="quote">
+            <blockquote>
+              "The sprites came over when I was injured, they were so helpful,
+              and so fun I wished I could have been out there working with
+              them."
+            </blockquote>
+            <figcaption>— Carlos H.</figcaption>
+          </figure>
+
+          <figure class="quote">
+            <blockquote>
+              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero,
+              recusandae. Vel, incidunt atque quidem"
+            </blockquote>
+            <figcaption>— Another Person</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Contact / inquiry form -->
+      <section class="section section--alt" id="contact">
+        <div class="section__head">
+          <p class="eyebrow">Get in touch</p>
+          <h2 class="section__title">Tell us how we can help</h2>
+          <p class="section__intro">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi
+            obcaecati beatae magnam nulla vitae, iste explicabo in nobis? Vel,
+            dolorum. Nulla, eius? Facilis quidem impedit dolorum? Iste libero
+            nesciunt dolor.
+          </p>
+        </div>
+
+        <form class="form" id="inquiry-form" novalidate>
+          <div class="form__row">
+            <label class="form__field">
+              <span class="form__label">Name <span class="req">*</span></span>
+              <input type="text" name="name" required autocomplete="name" />
+            </label>
+            <label class="form__field">
+              <span class="form__label">Email <span class="req">*</span></span>
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+          </div>
+
+          <label class="form__field">
+            <span class="form__label">
+              Phone <span class="form__optional">(optional)</span>
+            </span>
+            <input type="tel" name="phone" autocomplete="tel" />
+          </label>
+
+          <label class="form__field">
+            <span class="form__label">
+              How can we help you? <span class="req">*</span>
+            </span>
+            <textarea name="message" rows="5" required></textarea>
+          </label>
+
+          <button class="btn btn--primary" type="submit">Send inquiry</button>
+
+          <!-- Replaced with a success message by script.js on submit -->
+          <p class="form__status" id="form-status" role="status" hidden></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer__inner">
+        <p class="footer__brand">Helpful House Sprites</p>
+        <p class="footer__meta">
+          Flitting about the greater Portland area · (555) 555-5555 ·
+          hello@housesprites.example
+        </p>
+        <p class="footer__fine">
+          © 2026 Helpful House Sprites. Website by Danny Burrow
+        </p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
