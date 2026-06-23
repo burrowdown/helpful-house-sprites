@@ -206,35 +206,82 @@
           </p>
         </div>
 
+        <!-- Each card shows a short blurb; hovering (or clicking, to "stick"
+             it open) reveals the full description and a request button. -->
         <div class="services">
-          <article class="card">
+          <article class="card" data-service="A Spotless Home">
             <div class="card__icon" aria-hidden="true">✦</div>
             <h3 class="card__title">A Spotless Home</h3>
-            <p class="card__body">
-              Top-to-bottom cleaning that reaches the corners everyone forgets —
-              kitchens, baths, floors, and all. Book a one-time sparkle or a
-              recurring visit, and come home to a house that practically hums.
+            <p class="card__short">
+              Top-to-bottom cleaning that reaches the corners everyone forgets.
             </p>
+            <div class="card__detail">
+              <div class="card__detail-inner">
+                <p class="card__body">
+                  Top-to-bottom cleaning that reaches the corners everyone
+                  forgets — kitchens, baths, floors, and all. Book a one-time
+                  sparkle or a recurring visit, and come home to a house that
+                  practically hums.
+                </p>
+                <button
+                  type="button"
+                  class="btn btn--primary card__cta"
+                  data-service="A Spotless Home"
+                >
+                  Request service
+                </button>
+              </div>
+            </div>
           </article>
 
-          <article class="card">
+          <article class="card" data-service="Everything in Its Place">
             <div class="card__icon" aria-hidden="true">❖</div>
             <h3 class="card__title">Everything in Its Place</h3>
-            <p class="card__body">
-              From a single closet to a whole-home reset, we sort, declutter,
-              and conjure up systems you can actually keep. We bring the bins,
-              the labels, and a quiet sense of order that lingers after we go.
+            <p class="card__short">
+              Decluttering and organizing systems you can actually keep.
             </p>
+            <div class="card__detail">
+              <div class="card__detail-inner">
+                <p class="card__body">
+                  From a single closet to a whole-home reset, we sort,
+                  declutter, and conjure up systems you can actually keep. We
+                  bring the bins, the labels, and a quiet sense of order that
+                  lingers after we go.
+                </p>
+                <button
+                  type="button"
+                  class="btn btn--primary card__cta"
+                  data-service="Everything in Its Place"
+                >
+                  Request service
+                </button>
+              </div>
+            </div>
           </article>
 
-          <article class="card">
+          <article class="card" data-service="A Happy Garden">
             <div class="card__icon" aria-hidden="true">✿</div>
             <h3 class="card__title">A Happy Garden</h3>
-            <p class="card__body">
-              Mowing, edging, seasonal tidying, and a little extra fondness for
-              the beds and borders. We keep your grounds looking sharp so the
-              outside of your home is every bit as welcoming as the inside.
+            <p class="card__short">
+              Mowing, edging, and seasonal tidying for sharp-looking grounds.
             </p>
+            <div class="card__detail">
+              <div class="card__detail-inner">
+                <p class="card__body">
+                  Mowing, edging, seasonal tidying, and a little extra fondness
+                  for the beds and borders. We keep your grounds looking sharp
+                  so the outside of your home is every bit as welcoming as the
+                  inside.
+                </p>
+                <button
+                  type="button"
+                  class="btn btn--primary card__cta"
+                  data-service="A Happy Garden"
+                >
+                  Request service
+                </button>
+              </div>
+            </div>
           </article>
         </div>
       </section>
@@ -288,6 +335,20 @@
         </div>
 
         <form class="form" id="inquiry-form" novalidate>
+          <label class="form__field">
+            <span class="form__label">
+              What can we help you with? <span class="req">*</span>
+            </span>
+            <select name="service" id="service-select" required>
+              <option value="" disabled selected>Choose a service…</option>
+              <option value="A Spotless Home">A Spotless Home</option>
+              <option value="Everything in Its Place">
+                Everything in Its Place
+              </option>
+              <option value="A Happy Garden">A Happy Garden</option>
+            </select>
+          </label>
+
           <div class="form__row">
             <label class="form__field">
               <span class="form__label">Name <span class="req">*</span></span>
@@ -325,8 +386,11 @@
       <div class="footer__inner">
         <p class="footer__brand">Helpful House Sprites</p>
         <p class="footer__meta">
-          Flitting about the greater Portland area · (555) 555-5555 ·
-          hello@housesprites.example
+          <span class="footer__meta-item">Flitting about the greater Portland area</span>
+          <span class="footer__meta-sep" aria-hidden="true">·</span>
+          <span class="footer__meta-item">(555) 555-5555</span>
+          <span class="footer__meta-sep" aria-hidden="true">·</span>
+          <span class="footer__meta-item">hello@housesprites.example</span>
         </p>
         <p class="footer__fine">
           © 2026 Helpful House Sprites. Website by Danny Burrow

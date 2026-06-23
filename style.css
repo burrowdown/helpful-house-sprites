@@ -385,21 +385,27 @@ img {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
+  /* size each card to its own content so only the expanded one grows */
+  align-items: start;
 }
 
 .card {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 36px 30px;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  padding: 26px 26px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
 }
 
-.card:hover {
-  transform: translateY(-6px);
+.card:hover,
+.card.is-stuck {
   box-shadow: var(--shadow);
+}
+
+/* the accent border makes it obvious a card has been "stuck" open */
+.card.is-stuck {
+  border-color: var(--accent);
 }
 
 .card__icon {
@@ -413,9 +419,45 @@ img {
   margin-bottom: 10px;
 }
 
+.card__short {
+  color: var(--muted);
+  margin: 0;
+}
+
 .card__body {
   color: var(--muted);
   margin: 0;
+}
+
+/* collapsed by default; expands on hover or when stuck open via click.
+   the 0fr -> 1fr grid-row trick animates height smoothly. */
+.card__detail {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.28s ease,
+    opacity 0.2s ease;
+}
+
+.card:hover .card__detail,
+.card.is-stuck .card__detail {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.card__detail-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.card__detail .card__body {
+  margin-top: 14px;
+}
+
+.card__cta {
+  display: block;
+  margin: 18px auto 0;
 }
 
 /* ------------------------------ Testimonials ---------------------------- */
@@ -483,7 +525,8 @@ img {
 }
 
 .form input,
-.form textarea {
+.form textarea,
+.form select {
   width: 100%;
   font-family: inherit;
   font-size: 1rem;
@@ -497,8 +540,25 @@ img {
     box-shadow 0.18s ease;
 }
 
+/* custom dropdown chevron (native arrow removed via appearance: none) */
+.form select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath fill='none' stroke='%232b2b2b' stroke-width='2' d='M1 1l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+
+/* dim the placeholder option while no service is chosen */
+.form select:invalid {
+  color: var(--muted);
+}
+
 .form input:focus,
-.form textarea:focus {
+.form textarea:focus,
+.form select:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
@@ -510,7 +570,8 @@ img {
 
 /* invalid state only shows after a submit attempt (see script.js) */
 .form.was-validated input:invalid,
-.form.was-validated textarea:invalid {
+.form.was-validated textarea:invalid,
+.form.was-validated select:invalid {
   border-color: #c0593f;
 }
 
@@ -566,6 +627,15 @@ img {
 
   .profiles {
     grid-template-columns: 1fr;
+  }
+
+  /* phone, email, and area each get their own line on mobile */
+  .footer__meta-item {
+    display: block;
+  }
+
+  .footer__meta-sep {
+    display: none;
   }
 
   .nav__toggle {

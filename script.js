@@ -77,6 +77,35 @@ document.addEventListener("DOMContentLoaded", () => {
     )
   }
 
+  /* -------------------------- Service cards --------------------------- */
+  // Cards show a short blurb and expand on hover. Clicking a card "sticks"
+  // it open; its "Request service" button preselects the matching dropdown
+  // option and scrolls down to the inquiry form.
+  const serviceSelect = document.getElementById("service-select")
+  const contact = document.getElementById("contact")
+
+  const cards = document.querySelectorAll(".card")
+
+  cards.forEach((card) => {
+    card.addEventListener("click", (event) => {
+      // let the request button handle its own click without toggling
+      if (event.target.closest(".card__cta")) return
+      const willOpen = !card.classList.contains("is-stuck")
+      // only one card stays stuck open at a time
+      cards.forEach((other) => other.classList.remove("is-stuck"))
+      card.classList.toggle("is-stuck", willOpen)
+    })
+
+    const cta = card.querySelector(".card__cta")
+    if (cta) {
+      cta.addEventListener("click", () => {
+        const service = card.dataset.service
+        if (serviceSelect && service) serviceSelect.value = service
+        if (contact) contact.scrollIntoView({ behavior: "smooth" })
+      })
+    }
+  })
+
   /* ------------------------- Inquiry form ----------------------------- */
   // This is a dummy site: nothing is sent anywhere. We validate with the
   // browser's built-in constraints and show a friendly confirmation.
