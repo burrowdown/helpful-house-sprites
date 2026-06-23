@@ -52,6 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const menu = document.getElementById("nav-menu")
 
   if (toggle && menu) {
+    const closeMenu = () => {
+      menu.classList.remove("is-open")
+      toggle.setAttribute("aria-expanded", "false")
+    }
+
     toggle.addEventListener("click", () => {
       const open = menu.classList.toggle("is-open")
       toggle.setAttribute("aria-expanded", String(open))
@@ -59,11 +64,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // close the menu after tapping a link on mobile
     menu.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        menu.classList.remove("is-open")
-        toggle.setAttribute("aria-expanded", "false")
-      })
+      link.addEventListener("click", closeMenu)
     })
+
+    // collapse the menu when the user scrolls the page
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (menu.classList.contains("is-open")) closeMenu()
+      },
+      { passive: true }
+    )
   }
 
   /* ------------------------- Inquiry form ----------------------------- */
