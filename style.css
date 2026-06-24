@@ -505,6 +505,9 @@ img {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 32px 28px;
+  /* column layout lets the name anchor to the bottom of the card */
+  display: flex;
+  flex-direction: column;
 }
 
 .carousel__controls {
@@ -588,9 +591,16 @@ img {
   font-size: 1.3rem;
   line-height: 1.4;
   color: var(--text);
+  /* cap long quotes and let the text scroll within the card */
+  max-height: 11em;
+  overflow-y: auto;
+  /* keep text clear of the scrollbar when it appears */
+  padding-right: 6px;
 }
 
 .quote figcaption {
+  /* push the name to the bottom of the (equal-height) card */
+  margin-top: auto;
   color: var(--primary-dark);
   font-weight: 700;
   font-size: 0.9rem;
