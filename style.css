@@ -641,7 +641,7 @@ img {
   position: relative;
   overflow: hidden;
   /* tune the gallery image border here (width / style / color) */
-  border: 2px solid var(--accent);
+  border: 3px solid var(--accent);
 }
 
 /* round only the OUTER corners so the borders curve there and meet square
