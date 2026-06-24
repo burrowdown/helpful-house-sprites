@@ -20,11 +20,11 @@
 --------------------------------------------------------------------------- */
 
 :root {
-  /* seed defaults — overridden live by the admin panel */
-  --bg: #f7f4ec;
-  --primary: #6f8169;
-  --accent: #c75f7e;
-  --footer-bg: #2c2e2b;
+  /* seed defaults — overridden live by the admin panel (?admin=1) */
+  --bg: #eef1ea;
+  --primary: #b97c8c;
+  --accent: #57684f;
+  --footer-bg: #2f3a30;
 
   /* derived neutrals */
   --bg-alt: color-mix(in srgb, var(--bg) 90%, #000);
@@ -312,6 +312,7 @@ img {
   font-size: clamp(2rem, 4.5vw, 2.9rem);
   margin: 10px 0 16px;
   text-wrap: balance;
+  color: var(--accent);
 }
 
 .section__intro {
@@ -325,7 +326,7 @@ img {
   letter-spacing: 0.18em;
   font-size: 0.78rem;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--text);
   margin: 0;
 }
 

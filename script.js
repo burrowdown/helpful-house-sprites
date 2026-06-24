@@ -4,8 +4,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   /* --------------------------- Theme switcher ------------------------- */
   // Demo only: each row picks one seed color. We write it onto <body> as an
-  // inline custom property; style.css derives the rest. Each pick is
-  // remembered across reloads via localStorage.
+  // inline custom property; style.css derives the rest. Picks are live-only —
+  // nothing is persisted, so a reload always returns to the HTML defaults.
+  //
+  // The panel is hidden unless the page is loaded with ?admin=1. Hiding the
+  // panel does not affect the colors: the checked defaults are still applied.
   const GROUPS = [
     { name: "bg", prop: "--bg" },
     { name: "primary", prop: "--primary" },
@@ -13,36 +16,21 @@ document.addEventListener("DOMContentLoaded", () => {
     { name: "footer", prop: "--footer-bg" },
   ]
 
-  const read = (key) => {
-    try {
-      return localStorage.getItem(key)
-    } catch (e) {
-      return null // storage unavailable (e.g. private mode)
-    }
-  }
-  const write = (key, value) => {
-    try {
-      localStorage.setItem(key, value)
-    } catch (e) {
-      /* ignore */
-    }
-  }
+  const adminOn = new URLSearchParams(location.search).get("admin") === "1"
+  const panel = document.querySelector(".theme-admin")
+  if (panel && !adminOn) panel.hidden = true
 
   GROUPS.forEach((group) => {
     const radios = document.querySelectorAll(`input[name="${group.name}"]`)
-    const key = "hhs-" + group.name
-    const saved = read(key)
 
     radios.forEach((radio) => {
-      if (radio.value === saved) radio.checked = true
       radio.addEventListener("change", () => {
         if (!radio.checked) return
         document.body.style.setProperty(group.prop, radio.value)
-        write(key, radio.value)
       })
     })
 
-    // apply whatever ends up checked (saved choice, or the HTML default)
+    // apply whatever is checked (the HTML default)
     const active = document.querySelector(`input[name="${group.name}"]:checked`)
     if (active) document.body.style.setProperty(group.prop, active.value)
   })
