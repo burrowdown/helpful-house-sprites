@@ -94,6 +94,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
+  /* ----------------------- Testimonials carousel --------------------- */
+  // The track scrolls natively (so touch swipe just works); the buttons
+  // page through it. Controls are shown only when the content overflows —
+  // if every testimonial already fits, the carousel looks static.
+  const carousel = document.querySelector(".carousel")
+
+  if (carousel) {
+    const track = carousel.querySelector(".quotes")
+    const prev = carousel.querySelector(".carousel__btn--prev")
+    const next = carousel.querySelector(".carousel__btn--next")
+
+    const update = () => {
+      // a small tolerance avoids sub-pixel rounding showing phantom overflow
+      const maxScroll = track.scrollWidth - track.clientWidth
+      carousel.classList.toggle("is-scrollable", maxScroll > 1)
+      if (prev) prev.disabled = track.scrollLeft <= 1
+      if (next) next.disabled = track.scrollLeft >= maxScroll - 1
+    }
+
+    const page = (dir) => {
+      // advance by exactly one card (card width + the flex gap)
+      const card = track.querySelector(".quote")
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 0
+      const step = card ? card.offsetWidth + gap : track.clientWidth
+      track.scrollBy({ left: dir * step, behavior: "smooth" })
+    }
+
+    if (prev) prev.addEventListener("click", () => page(-1))
+    if (next) next.addEventListener("click", () => page(1))
+
+    track.addEventListener("scroll", update, { passive: true })
+    window.addEventListener("resize", update)
+    update()
+  }
+
   /* ------------------------- Inquiry form ----------------------------- */
   // This is a dummy site: nothing is sent anywhere. We validate with the
   // browser's built-in constraints and show a friendly confirmation.

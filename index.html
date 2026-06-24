@@ -234,12 +234,10 @@
             </div>
           </article>
 
-          <article class="card" data-service="Everything in Its Place">
+          <article class="card" data-service="A place for everything">
             <div class="card__icon" aria-hidden="true">❖</div>
-            <h3 class="card__title">Everything in Its Place</h3>
-            <p class="card__short">
-              Decluttering and organizing systems you can actually keep.
-            </p>
+            <h3 class="card__title">A place for everything</h3>
+            <p class="card__short">And everything in it's place.</p>
             <div class="card__detail">
               <div class="card__detail-inner">
                 <p class="card__body">
@@ -251,7 +249,7 @@
                 <button
                   type="button"
                   class="btn btn--primary card__cta"
-                  data-service="Everything in Its Place"
+                  data-service="A place for everything"
                 >
                   Request service
                 </button>
@@ -259,9 +257,9 @@
             </div>
           </article>
 
-          <article class="card" data-service="A Happy Garden">
+          <article class="card" data-service="A Healthy Garden">
             <div class="card__icon" aria-hidden="true">✿</div>
-            <h3 class="card__title">A Happy Garden</h3>
+            <h3 class="card__title">A Healthy Garden</h3>
             <p class="card__short">
               Mowing, edging, and seasonal tidying for sharp-looking grounds.
             </p>
@@ -276,7 +274,7 @@
                 <button
                   type="button"
                   class="btn btn--primary card__cta"
-                  data-service="A Happy Garden"
+                  data-service="A Healthy Garden"
                 >
                   Request service
                 </button>
@@ -293,31 +291,82 @@
           <h2 class="section__title">Hear from happy homes</h2>
         </div>
 
-        <div class="quotes">
-          <figure class="quote">
-            <blockquote>
-              "Sunshine is reliable and thorough, I love having someone I can
-              trust to take care of my home."
-            </blockquote>
-            <figcaption>— Danny B.</figcaption>
-          </figure>
+        <!-- Horizontal scroll carousel: native swipe on touch, buttons on
+             larger screens. Controls only appear when content overflows. -->
+        <div class="carousel">
+          <div
+            class="quotes"
+            role="group"
+            aria-label="Testimonials"
+            tabindex="0"
+          >
+            <figure class="quote">
+              <blockquote>
+                "Sunshine is reliable and thorough, I love having someone I can
+                trust to take care of my home."
+              </blockquote>
+              <figcaption>— Danny B.</figcaption>
+            </figure>
 
-          <figure class="quote">
-            <blockquote>
-              "The sprites came over when I was injured, they were so helpful,
-              and so fun I wished I could have been out there working with
-              them."
-            </blockquote>
-            <figcaption>— Carlos H.</figcaption>
-          </figure>
+            <figure class="quote">
+              <blockquote>
+                "The sprites came over when I was injured, they were so helpful,
+                and so fun I wished I could have been out there working with
+                them."
+              </blockquote>
+              <figcaption>— Carlos H.</figcaption>
+            </figure>
 
-          <figure class="quote">
-            <blockquote>
-              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero,
-              recusandae. Vel, incidunt atque quidem"
-            </blockquote>
-            <figcaption>— Another Person</figcaption>
-          </figure>
+            <figure class="quote">
+              <blockquote>
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Libero, recusandae. Vel, incidunt atque quidem"
+              </blockquote>
+              <figcaption>— Another Person</figcaption>
+            </figure>
+
+            <figure class="quote">
+              <blockquote>
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Quaerat, voluptatum. Nesciunt quod dolorem dignissimos
+                voluptate."
+              </blockquote>
+              <figcaption>— Another Person</figcaption>
+            </figure>
+
+            <figure class="quote">
+              <blockquote>
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Tempora repellendus voluptatibus sit aspernatur, eius nam."
+              </blockquote>
+              <figcaption>— Another Person</figcaption>
+            </figure>
+
+            <figure class="quote">
+              <blockquote>
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste
+                accusantium perferendis doloribus quam in aliquid."
+              </blockquote>
+              <figcaption>— Another Person</figcaption>
+            </figure>
+          </div>
+
+          <div class="carousel__controls">
+            <button
+              type="button"
+              class="carousel__btn carousel__btn--prev"
+              aria-label="Previous testimonials"
+            >
+              <span aria-hidden="true">‹</span>
+            </button>
+            <button
+              type="button"
+              class="carousel__btn carousel__btn--next"
+              aria-label="Next testimonials"
+            >
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -342,10 +391,11 @@
             <select name="service" id="service-select" required>
               <option value="" disabled selected>Choose a service…</option>
               <option value="A Spotless Home">A Spotless Home</option>
-              <option value="Everything in Its Place">
-                Everything in Its Place
+              <option value="A place for everything">
+                A place for everything
               </option>
-              <option value="A Happy Garden">A Happy Garden</option>
+              <option value="A Healthy Garden">A Healthy Garden</option>
+              <option value="Other">Other — Please describe</option>
             </select>
           </label>
 
@@ -386,7 +436,9 @@
       <div class="footer__inner">
         <p class="footer__brand">Helpful House Sprites</p>
         <p class="footer__meta">
-          <span class="footer__meta-item">Flitting about the greater Portland area</span>
+          <span class="footer__meta-item"
+            >Flitting about the greater Portland area</span
+          >
           <span class="footer__meta-sep" aria-hidden="true">·</span>
           <span class="footer__meta-item">(555) 555-5555</span>
           <span class="footer__meta-sep" aria-hidden="true">·</span>
