@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "gardenscaping",
+    "title": "Gardenscaping",
+    "caption": "",
+    "before": "gallery/gardenscaping/before.jpg",
+    "after": "gallery/gardenscaping/after.jpg"
+  },
+  {
+    "slug": "horse-glow-up",
+    "title": "Horse Glow Up",
+    "caption": "",
+    "before": "gallery/horse-glow-up/before.jpg",
+    "after": "gallery/horse-glow-up/after.jpg"
+  },
+  {
+    "slug": "landscape construction",
+    "title": "Landscape Construction",
+    "caption": "",
+    "before": "gallery/landscape construction/before.jpg",
+    "after": "gallery/landscape construction/after.jpg"
+  },
+  {
+    "slug": "sand-castle",
+    "title": "Sand Castle",
+    "caption": "",
+    "before": "gallery/sand-castle/before.jpg",
+    "after": "gallery/sand-castle/after.jpg"
+  },
+  {
+    "slug": "truck-but-actually-useful",
+    "title": "Truck But Actually Useful",
+    "caption": "",
+    "before": "gallery/truck-but-actually-useful/before.jpg",
+    "after": "gallery/truck-but-actually-useful/after.jpg"
+  }
+]

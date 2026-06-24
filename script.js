@@ -94,14 +94,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
-  /* ----------------------- Testimonials carousel --------------------- */
-  // The track scrolls natively (so touch swipe just works); the buttons
-  // page through it. Controls are shown only when the content overflows —
-  // if every testimonial already fits, the carousel looks static.
-  const carousel = document.querySelector(".carousel")
-
-  if (carousel) {
-    const track = carousel.querySelector(".quotes")
+  /* ---------------------------- Carousels ---------------------------- */
+  // Shared behavior for any .carousel: the track scrolls natively (so touch
+  // swipe just works); the buttons page through it one item at a time.
+  // Controls are shown only when the content overflows — if everything fits,
+  // the carousel looks static. Returns update() so callers can re-measure
+  // after async content (e.g. the gallery) is rendered in.
+  const setupCarousel = (carousel) => {
+    const track = carousel.querySelector("[data-carousel-track]")
+    if (!track) return () => {}
     const prev = carousel.querySelector(".carousel__btn--prev")
     const next = carousel.querySelector(".carousel__btn--next")
 
@@ -114,10 +115,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const page = (dir) => {
-      // advance by exactly one card (card width + the flex gap)
-      const card = track.querySelector(".quote")
+      // advance by exactly one item (item width + the flex gap)
+      const item = track.firstElementChild
       const gap = parseFloat(getComputedStyle(track).columnGap) || 0
-      const step = card ? card.offsetWidth + gap : track.clientWidth
+      const step = item ? item.offsetWidth + gap : track.clientWidth
       track.scrollBy({ left: dir * step, behavior: "smooth" })
     }
 
@@ -127,6 +128,88 @@ document.addEventListener("DOMContentLoaded", () => {
     track.addEventListener("scroll", update, { passive: true })
     window.addEventListener("resize", update)
     update()
+    return update
+  }
+
+  const testimonialCarousel = document.querySelector("#testimonials .carousel")
+  if (testimonialCarousel) setupCarousel(testimonialCarousel)
+
+  /* ----------------------- Before & after gallery ------------------- */
+  // Fetches gallery/manifest.json and renders each before/after pair as a
+  // side-by-side block. The manifest is the single source of truth — adding
+  // pairs is a content task (see notes.md), not a code change.
+  const galleryGrid = document.getElementById("gallery-grid")
+
+  if (galleryGrid) {
+    const buildPhoto = (src, label, title) => {
+      const fig = document.createElement("div")
+      fig.className = "ba__photo"
+
+      const tag = document.createElement("span")
+      tag.className = "ba__tag"
+      tag.textContent = label
+
+      const img = document.createElement("img")
+      img.src = src
+      img.alt = `${title} — ${label.toLowerCase()}`
+      img.loading = "lazy"
+
+      fig.append(tag, img)
+      return fig
+    }
+
+    const render = (items) => {
+      galleryGrid.innerHTML = ""
+      items.forEach((item) => {
+        const fig = document.createElement("figure")
+        fig.className = "ba"
+
+        const pair = document.createElement("div")
+        pair.className = "ba__pair"
+        pair.append(
+          buildPhoto(item.before, "Before", item.title),
+          buildPhoto(item.after, "After", item.title)
+        )
+
+        const caption = document.createElement("figcaption")
+        caption.className = "ba__caption"
+        const h3 = document.createElement("h3")
+        h3.className = "ba__title"
+        h3.textContent = item.title
+        caption.append(h3)
+        if (item.caption) {
+          const p = document.createElement("p")
+          p.className = "ba__text"
+          p.textContent = item.caption
+          caption.append(p)
+        }
+
+        fig.append(pair, caption)
+        galleryGrid.append(fig)
+      })
+    }
+
+    const galleryCarousel = galleryGrid.closest(".carousel")
+
+    fetch("gallery/manifest.json")
+      .then((res) => {
+        if (!res.ok) throw new Error(`manifest ${res.status}`)
+        return res.json()
+      })
+      .then((items) => {
+        if (Array.isArray(items) && items.length) {
+          render(items)
+        } else {
+          galleryGrid.textContent = "Project photos are on their way — check back soon."
+        }
+      })
+      .catch(() => {
+        galleryGrid.textContent = "Project photos are on their way — check back soon."
+      })
+      .finally(() => {
+        // measure once content is in the DOM so controls show iff it overflows
+        if (galleryCarousel) setupCarousel(galleryCarousel)
+      })
   }
 
   /* ------------------------- Inquiry form ----------------------------- */
