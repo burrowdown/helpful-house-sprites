@@ -4,11 +4,10 @@
 
    THEMING
    -------
-   The admin panel lets the user pick FOUR seed colors individually — a
-   background, a primary, an accent, and a footer. script.js writes those
-   four onto <body> as inline custom properties; every other token below is
-   DERIVED from a seed with color-mix(), so any combination stays cohesive.
-   Seeds (set live):
+   Four seed colors are set in :root below; every other token is DERIVED from
+   a seed with color-mix(), so the palette stays cohesive. To re-theme the
+   site, change only the four seeds.
+   Seeds:
      --bg        page background
      --primary   main brand color (buttons, nav CTA, avatars)
      --accent    highlight color (eyebrows, icons, links, focus)
@@ -20,7 +19,7 @@
 --------------------------------------------------------------------------- */
 
 :root {
-  /* seed defaults — overridden live by the admin panel (?admin=1) */
+  /* seed colors */
   --bg: #eef1ea;
   --primary: #b97c8c;
   --accent: #57684f;
@@ -85,49 +84,6 @@ a {
 
 img {
   max-width: 100%;
-}
-
-/* ---------------------------- Admin panel ------------------------------- */
-/* Demo control only — deliberately plain: white bg, black border, legible. */
-
-.theme-admin {
-  padding: 8px 24px;
-  background: #ffffff;
-  color: #000000;
-  border-bottom: 2px solid #000000;
-  font-size: 0.9rem;
-}
-
-.theme-admin__row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 16px;
-  padding: 5px 0;
-}
-
-.theme-admin__row + .theme-admin__row {
-  border-top: 1px solid #d0d0d0;
-}
-
-.theme-admin__label {
-  min-width: 86px;
-  font-weight: 700;
-}
-
-.theme-admin label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
-.theme-admin .swatch {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.35);
-  display: inline-block;
 }
 
 /* ----------------------------- Navigation ------------------------------- */
