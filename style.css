@@ -606,6 +606,87 @@ img {
   font-size: 0.9rem;
 }
 
+/* ----------------------------- Before & after --------------------------- */
+
+/* horizontal carousel track — one project (a before/after pair) per view */
+.gallery {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.ba {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  margin: 0;
+}
+
+/* The accent lives on the PAIR, not the photos: a border rings the outside,
+   and a matching grid gap over the accent-colored background shows through as
+   a single seam between the two photos. So the seam is never doubled and the
+   outer edge is even. One knob — --ba-border — sets both. This also switches
+   axes for free: on mobile the gap becomes the horizontal seam. */
+.ba__pair {
+  --ba-border: 3px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ba-border);
+  background: var(--accent);
+  border: var(--ba-border) solid var(--accent);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.ba__photo {
+  position: relative;
+}
+
+.ba__photo img {
+  display: block;
+  width: 100%;
+  /* uniform framing regardless of the source photo's dimensions */
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.ba__tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 78%, transparent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.ba__caption {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.ba__title {
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--accent);
+}
+
+.ba__text {
+  color: var(--muted);
+  margin: 6px 0 0;
+}
+
 /* --------------------------------- Form --------------------------------- */
 
 .form {
@@ -743,6 +824,18 @@ img {
   /* one testimonial per view on mobile */
   .quote {
     flex-basis: 100%;
+  }
+
+  /* stack before/after vertically on mobile — the pair's border, radius, and
+     gap-seam all carry over automatically; only the axis changes */
+  .ba__pair {
+    grid-template-columns: 1fr;
+  }
+
+  /* cap each image so both stacked photos + the nav fit on screen.
+     tune this vh value to taste (two images ≈ 2× this height). */
+  .ba__photo img {
+    max-height: 34vh;
   }
 
   .profiles {
