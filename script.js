@@ -95,6 +95,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     track.addEventListener("scroll", update, { passive: true })
     window.addEventListener("resize", update)
+    // re-measure after late layout shifts (web fonts, images) that change the
+    // track's scrollWidth — otherwise is-scrollable can be left stale
+    window.addEventListener("load", update)
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(update)
     update()
     return update
   }
