@@ -629,31 +629,24 @@ img {
   margin: 0;
 }
 
-/* the two photos are squished together; the pair clips the outer corners so
-   only the touching edges stay square */
+/* The accent lives on the PAIR, not the photos: a border rings the outside,
+   and a matching grid gap over the accent-colored background shows through as
+   a single seam between the two photos. So the seam is never doubled and the
+   outer edge is even. One knob — --ba-border — sets both. This also switches
+   axes for free: on mobile the gap becomes the horizontal seam. */
 .ba__pair {
+  --ba-border: 3px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0;
+  gap: var(--ba-border);
+  background: var(--accent);
+  border: var(--ba-border) solid var(--accent);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .ba__photo {
   position: relative;
-  overflow: hidden;
-  /* tune the gallery image border here (width / style / color) */
-  border: 3px solid var(--accent);
-}
-
-/* round only the OUTER corners so the borders curve there and meet square
-   in the middle where the two photos touch */
-.ba__photo:first-child {
-  border-top-left-radius: var(--radius);
-  border-bottom-left-radius: var(--radius);
-}
-
-.ba__photo:last-child {
-  border-top-right-radius: var(--radius);
-  border-bottom-right-radius: var(--radius);
 }
 
 .ba__photo img {
@@ -833,18 +826,10 @@ img {
     flex-basis: 100%;
   }
 
-  /* stack before/after vertically on mobile */
+  /* stack before/after vertically on mobile — the pair's border, radius, and
+     gap-seam all carry over automatically; only the axis changes */
   .ba__pair {
     grid-template-columns: 1fr;
-  }
-
-  /* stacked: round top corners of the first, bottom corners of the last */
-  .ba__photo:first-child {
-    border-radius: var(--radius) var(--radius) 0 0;
-  }
-
-  .ba__photo:last-child {
-    border-radius: 0 0 var(--radius) var(--radius);
   }
 
   /* cap each image so both stacked photos + the nav fit on screen.
