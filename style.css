@@ -322,7 +322,8 @@ img {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
-  /* size each card to its own content so only the expanded one grows */
+  /* start (not stretch) so an expanding card grows alone; the cards get a
+     uniform resting height from .card's min-height instead */
   align-items: start;
 }
 
@@ -331,6 +332,8 @@ img {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 26px 26px;
+  /* standard resting height across the row (tune to cover the tallest card) */
+  min-height: 230px;
   cursor: pointer;
   transition: box-shadow 0.2s ease;
 }
@@ -535,6 +538,13 @@ img {
   overflow-y: auto;
   /* keep text clear of the scrollbar when it appears */
   padding-right: 6px;
+}
+
+/* JS adds .is-clipped when a quote overflows and isn't scrolled to the end;
+   fading the last couple of lines signals there's more to read */
+.quote blockquote.is-clipped {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 3em), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 3em), transparent);
 }
 
 .quote figcaption {

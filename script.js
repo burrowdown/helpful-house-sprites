@@ -103,8 +103,27 @@ document.addEventListener("DOMContentLoaded", () => {
     return update
   }
 
-  const testimonialCarousel = document.querySelector("#testimonials .carousel")
-  if (testimonialCarousel) setupCarousel(testimonialCarousel)
+  // set up every carousel once; keep each update() so async content (the
+  // gallery) can trigger a re-measure without re-binding listeners
+  const carouselUpdates = new Map()
+  document.querySelectorAll(".carousel").forEach((carousel) => {
+    carouselUpdates.set(carousel, setupCarousel(carousel))
+  })
+
+  // fade the bottom of any testimonial quote that overflows its max-height,
+  // as a "there's more below" cue; clear it once scrolled to the end
+  document.querySelectorAll(".quote blockquote").forEach((bq) => {
+    const sync = () => {
+      const overflowing = bq.scrollHeight > bq.clientHeight + 1
+      const atBottom = bq.scrollTop + bq.clientHeight >= bq.scrollHeight - 1
+      bq.classList.toggle("is-clipped", overflowing && !atBottom)
+    }
+    bq.addEventListener("scroll", sync, { passive: true })
+    window.addEventListener("resize", sync)
+    window.addEventListener("load", sync)
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync)
+    sync()
+  })
 
   /* ----------------------- Before & after gallery ------------------- */
   // Fetches gallery/manifest.json and renders each before/after pair as a
@@ -179,8 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
         galleryGrid.textContent = "Project photos are on their way — check back soon."
       })
       .finally(() => {
-        // measure once content is in the DOM so controls show iff it overflows
-        if (galleryCarousel) setupCarousel(galleryCarousel)
+        // re-measure now that the gallery content is in the DOM (listeners
+        // were already bound above; just re-run this carousel's update)
+        const update = galleryCarousel && carouselUpdates.get(galleryCarousel)
+        if (update) update()
       })
   }
 
