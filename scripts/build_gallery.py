@@ -1,49 +1,68 @@
 #!/usr/bin/env python3
-"""Build gallery/manifest.json and compress before/after photos.
+"""Build gallery/manifest.json and generate web-optimized images.
 
-Scans each subfolder of gallery/ for a `before.*` and `after.*` image. A folder
-that has BOTH is added to the manifest (title from the folder name, optional
-caption from info.txt); folders missing either are skipped and logged. Large
-images are downscaled and re-encoded in place, while already-web-ready images
-are left untouched so re-runs don't keep re-compressing (and degrading) them.
+For each gallery/<slug>/ folder that has a `before.*` and `after.*` SOURCE
+image, this writes sRGB WebP derivatives (before.webp / after.webp) and points
+the manifest at them. Key properties:
 
-Runs in CI (see .github/workflows/gallery.yml), but also locally:
+- Non-destructive: source uploads are never modified or deleted. The .webp
+  derivatives are separate files, so a bad conversion can't eat an original.
+- Color-correct: every image is converted to sRGB using its embedded ICC
+  profile, so wide-gamut / HDR photos (e.g. iPhone Display-P3) render the same
+  in every browser instead of shifting color.
+- Format-flexible input: JPEG, PNG, and HEIC/HEIF (iPhone default) are all
+  accepted. Output is always WebP.
 
-    python3 scripts/build_gallery.py            # write manifest + compress
-    python3 scripts/build_gallery.py --dry-run  # preview, change nothing
+Note on HDR: for HDR sources (P3 + PQ with an Apple gain map) this produces a
+correct, stable *SDR* sRGB image. It does not reproduce gain-map HDR tone
+mapping (no Linux library does that reliably) — sRGB is the right target for a
+web gallery anyway.
 
-Bad/unexpected folder names are handled gracefully: extensions are matched
-case-insensitively, spaces in folder names are kept as-is (they resolve fine as
-URLs), and a folder with two "before" files picks one deterministically.
+Runs in CI (see .github/workflows/gallery.yml); also locally:
+    python3 scripts/build_gallery.py [--dry-run]
 """
 
 import argparse
+import io
 import json
 import os
 import sys
 
+# HEIC/HEIF support is optional; register it if pillow-heif is installed.
+try:
+    from pillow_heif import register_heif_opener
+
+    register_heif_opener()
+    HEIF_OK = True
+except ImportError:
+    HEIF_OK = False
+
+from PIL import Image, ImageCms, ImageOps
+
 GALLERY_DIR = "gallery"
 MANIFEST = os.path.join(GALLERY_DIR, "manifest.json")
-EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp")
+# Accepted SOURCE extensions. Note: .webp is intentionally excluded so it can
+# never collide with our own .webp output.
+SOURCE_EXTS = (".jpg", ".jpeg", ".png", ".heic", ".heif")
+HEIF_EXTS = (".heic", ".heif")
 
-MAX_EDGE = 1600           # px — cap on the long edge
-SIZE_LIMIT = 600 * 1024   # bytes — recompress anything bigger, even if small dims
-JPEG_QUALITY = 82
+MAX_EDGE = 1600       # px — cap on the long edge
 WEBP_QUALITY = 82
 
+SRGB_PROFILE = ImageCms.createProfile("sRGB")
 
-def find_image(folder, base):
-    """Path to `<base>.<ext>` in folder (case-insensitive ext), or None."""
+
+def find_source(folder, base):
+    """Path to `<base>.<ext>` (case-insensitive) for an accepted source, or None."""
     matches = [
         name
         for name in os.listdir(folder)
         if os.path.splitext(name)[0].lower() == base
-        and os.path.splitext(name)[1].lower() in EXTENSIONS
+        and os.path.splitext(name)[1].lower() in SOURCE_EXTS
     ]
     if not matches:
         return None
-    # deterministic if someone dropped both before.jpg and before.png
-    return os.path.join(folder, sorted(matches)[0])
+    return os.path.join(folder, sorted(matches)[0])  # deterministic if several
 
 
 def title_from_slug(slug):
@@ -62,41 +81,35 @@ def read_info(folder):
     return (title or None), caption
 
 
-def compress(path, dry_run):
-    """Downscale/re-encode in place if oversized. Returns True if it changed."""
-    try:
-        from PIL import Image, ImageOps
-    except ImportError:
-        print("  ! Pillow not installed; skipping compression", file=sys.stderr)
-        return False
+def to_srgb(img):
+    """Convert to sRGB using the embedded profile if there is one."""
+    icc = img.info.get("icc_profile")
+    if icc:
+        try:
+            src = ImageCms.ImageCmsProfile(io.BytesIO(icc))
+            return ImageCms.profileToProfile(img, src, SRGB_PROFILE, outputMode="RGB")
+        except Exception:
+            pass  # unreadable profile — fall back to a plain RGB cast
+    return img.convert("RGB")
 
-    big_file = os.path.getsize(path) > SIZE_LIMIT
-    with Image.open(path) as img:
-        img = ImageOps.exif_transpose(img)  # bake in phone rotation, drop the tag
-        oversized = max(img.size) > MAX_EDGE
-        if not oversized and not big_file:
-            return False  # already web-ready — leave it (keeps re-runs idempotent)
 
+def build_derivative(src_path, out_path, dry_run):
+    """Write an sRGB, downscaled WebP derivative of src_path."""
+    with Image.open(src_path) as im:
+        im.load()
+        im = ImageOps.exif_transpose(im)  # bake in rotation
+        converted = bool(im.info.get("icc_profile"))
+        im = to_srgb(im)
+        im.thumbnail((MAX_EDGE, MAX_EDGE), Image.LANCZOS)  # never upscales
+        note = "P3/ICC→sRGB" if converted else "sRGB"
         if dry_run:
             print(
-                f"  ~ would compress {path} "
-                f"({img.size[0]}x{img.size[1]}, {os.path.getsize(path) // 1024} KB)"
+                f"  ~ would write {out_path} "
+                f"({im.size[0]}x{im.size[1]}, {note}, from {os.path.basename(src_path)})"
             )
-            return True
-
-        img.thumbnail((MAX_EDGE, MAX_EDGE), Image.LANCZOS)  # never upscales
-        ext = os.path.splitext(path)[1].lower()
-        if ext in (".jpg", ".jpeg"):
-            img.convert("RGB").save(
-                path, "JPEG", quality=JPEG_QUALITY, optimize=True, progressive=True
-            )
-        elif ext == ".webp":
-            img.save(path, "WEBP", quality=WEBP_QUALITY, method=6)
-        else:  # .png
-            img.save(path, "PNG", optimize=True)
-
-    print(f"  ~ compressed {path} -> {os.path.getsize(path) // 1024} KB")
-    return True
+            return
+        im.save(out_path, "WEBP", quality=WEBP_QUALITY, method=6)
+    print(f"  ~ {out_path} ({os.path.getsize(out_path) // 1024} KB, {note})")
 
 
 def main():
@@ -118,17 +131,34 @@ def main():
         if not os.path.isdir(folder):
             continue
 
-        before = find_image(folder, "before")
-        after = find_image(folder, "after")
+        before = find_source(folder, "before")
+        after = find_source(folder, "after")
         if not (before and after):
             have = [n for n, p in (("before", before), ("after", after)) if p]
             skipped.append(entry)
             print(f"- skip '{entry}': needs before + after (found: {have or 'none'})")
             continue
 
+        # can't decode HEIC without pillow-heif — warn and skip rather than crash
+        needs_heif = any(
+            os.path.splitext(p)[1].lower() in HEIF_EXTS for p in (before, after)
+        )
+        if needs_heif and not HEIF_OK:
+            skipped.append(entry)
+            print(f"- skip '{entry}': HEIC source but pillow-heif not installed")
+            continue
+
         print(f"+ {entry}")
-        for photo in (before, after):
-            compress(photo, args.dry_run)
+        pair = {}
+        try:
+            for base, src in (("before", before), ("after", after)):
+                out = os.path.join(folder, base + ".webp")
+                build_derivative(src, out, args.dry_run)
+                pair[base] = out.replace(os.sep, "/")
+        except Exception as e:  # noqa: BLE001 — keep one bad folder from failing all
+            skipped.append(entry)
+            print(f"- skip '{entry}': failed to process ({e})")
+            continue
 
         title, caption = read_info(folder)
         items.append(
@@ -136,15 +166,18 @@ def main():
                 "slug": entry,
                 "title": title or title_from_slug(entry),
                 "caption": caption,
-                "before": before.replace(os.sep, "/"),
-                "after": after.replace(os.sep, "/"),
+                "before": pair["before"],
+                "after": pair["after"],
             }
         )
 
-    print(f"\n{len(items)} pair(s) included, {len(skipped)} folder(s) skipped.")
+    print(
+        f"\n{len(items)} pair(s) included, {len(skipped)} skipped."
+        + ("" if HEIF_OK else "  (HEIC support OFF — install pillow-heif)")
+    )
 
     if args.dry_run:
-        print("(dry run — manifest not written)")
+        print("(dry run — nothing written)")
         return 0
 
     with open(MANIFEST, "w", encoding="utf-8") as f:

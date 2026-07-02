@@ -1,37 +1,16 @@
 [
   {
-    "slug": "gardenscaping",
-    "title": "Gardenscaping",
+    "slug": "aggressive tree removal",
+    "title": "Aggressive Tree Removal",
     "caption": "",
-    "before": "gallery/gardenscaping/before.jpg",
-    "after": "gallery/gardenscaping/after.jpg"
+    "before": "gallery/aggressive tree removal/before.webp",
+    "after": "gallery/aggressive tree removal/after.webp"
   },
   {
-    "slug": "horse-glow-up",
-    "title": "Horse Glow Up",
+    "slug": "honeysuckle eradication",
+    "title": "Honeysuckle Eradication",
     "caption": "",
-    "before": "gallery/horse-glow-up/before.jpg",
-    "after": "gallery/horse-glow-up/after.jpg"
-  },
-  {
-    "slug": "landscape construction",
-    "title": "Landscape Construction",
-    "caption": "",
-    "before": "gallery/landscape construction/before.jpg",
-    "after": "gallery/landscape construction/after.jpg"
-  },
-  {
-    "slug": "sand-castle",
-    "title": "Sand Castle",
-    "caption": "",
-    "before": "gallery/sand-castle/before.jpg",
-    "after": "gallery/sand-castle/after.jpg"
-  },
-  {
-    "slug": "truck-but-actually-useful",
-    "title": "Truck But Actually Useful",
-    "caption": "",
-    "before": "gallery/truck-but-actually-useful/before.jpg",
-    "after": "gallery/truck-but-actually-useful/after.jpg"
+    "before": "gallery/honeysuckle eradication/before.webp",
+    "after": "gallery/honeysuckle eradication/after.webp"
   }
 ]

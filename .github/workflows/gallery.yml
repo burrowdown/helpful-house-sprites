@@ -28,8 +28,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install Pillow
-        run: pip install Pillow
+      - name: Install image libraries
+        # pillow-heif ships manylinux wheels bundling libheif + the HEVC
+        # decoder, so HEIC works with no apt/system packages.
+        run: pip install Pillow pillow-heif
 
       - name: Build manifest + compress images
         run: python3 scripts/build_gallery.py
