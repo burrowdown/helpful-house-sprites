@@ -74,12 +74,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const prev = carousel.querySelector(".carousel__btn--prev")
     const next = carousel.querySelector(".carousel__btn--next")
 
+    // scroll-snap parks the track a few px in when the container has padding
+    // (the track rests at scrollLeft ≈ padding, not 0), so derive the end
+    // tolerance from that padding instead of assuming 0/max exactly.
+    const cs = getComputedStyle(track)
+    const padStart = (parseFloat(cs.paddingLeft) || 0) + 2
+    const padEnd = (parseFloat(cs.paddingRight) || 0) + 2
+
     const update = () => {
-      // a small tolerance avoids sub-pixel rounding showing phantom overflow
       const maxScroll = track.scrollWidth - track.clientWidth
       carousel.classList.toggle("is-scrollable", maxScroll > 1)
-      if (prev) prev.disabled = track.scrollLeft <= 1
-      if (next) next.disabled = track.scrollLeft >= maxScroll - 1
+      if (prev) prev.disabled = track.scrollLeft <= padStart
+      if (next) next.disabled = track.scrollLeft >= maxScroll - padEnd
     }
 
     const page = (dir) => {
