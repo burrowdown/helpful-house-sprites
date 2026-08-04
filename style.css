@@ -395,6 +395,19 @@ img {
   margin-top: 14px;
 }
 
+/* a nested service tucked inside a card's description (e.g. the organizing
+   add-on under "A Kept Home"); the accent rule sets it apart from the body */
+.card__nested {
+  margin-top: 18px;
+  padding-left: 16px;
+  border-left: 2px solid var(--accent);
+}
+
+.card__nested-title {
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+
 .card__cta {
   display: block;
   margin: 18px auto 0;

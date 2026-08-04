@@ -114,24 +114,24 @@
         <!-- Each card shows a short blurb; hovering (or clicking, to "stick"
              it open) reveals the full description and a request button. -->
         <div class="services">
-          <article class="card" data-service="A Spotless Home">
+          <article class="card" data-service="A Spotless House">
             <div class="card__icon" aria-hidden="true">✦</div>
-            <h3 class="card__title">A Spotless Home</h3>
+            <h3 class="card__title">A Spotless House</h3>
             <p class="card__short">
-              Top-to-bottom cleaning that reaches the corners everyone forgets.
+              Sweeping, mopping, dusting, and sanitizing — every surface, seen
+              to.
             </p>
             <div class="card__detail">
               <div class="card__detail-inner">
                 <p class="card__body">
-                  Top-to-bottom cleaning that reaches the corners everyone
-                  forgets — kitchens, baths, floors, and all. Book a one-time
-                  sparkle or a recurring visit, and come home to a house that
-                  practically hums.
+                  Tasks that keep the house clean — sweeping, mopping,
+                  vacuuming, wiping, dusting; scrubbing and sanitizing the
+                  surfaces of the home.
                 </p>
                 <button
                   type="button"
                   class="btn btn--primary card__cta"
-                  data-service="A Spotless Home"
+                  data-service="A Spotless House"
                 >
                   Request service
                 </button>
@@ -139,22 +139,37 @@
             </div>
           </article>
 
-          <article class="card" data-service="A place for everything">
+          <article class="card" data-service="A Kept Home">
             <div class="card__icon" aria-hidden="true">❖</div>
-            <h3 class="card__title">A place for everything</h3>
-            <p class="card__short">And everything in it's place.</p>
+            <h3 class="card__title">A Kept Home</h3>
+            <p class="card__short">
+              The everyday upkeep that keeps a home humming along.
+            </p>
             <div class="card__detail">
               <div class="card__detail-inner">
                 <p class="card__body">
-                  From a single closet to a whole-home reset, we sort,
-                  declutter, and conjure up systems you can actually keep. We
-                  bring the bins, the labels, and a quiet sense of order that
-                  lingers after we go.
+                  Tasks that keep the home running — laundry/linens turnover,
+                  dishes, cleaning out and rotating the fridge/pantry, and
+                  tidying up high traffic areas; getting the work out of the way
+                  so there's time to play!
                 </p>
+                <div class="card__nested">
+                  <h4 class="card__nested-title">
+                    A Place for Everything and Everything in its Place
+                  </h4>
+                  <p class="card__body">
+                    If you've lost your home underneath your things, we can help
+                    you figure out what you need to keep, what you need to let
+                    go, and where to send it. This service usually takes several
+                    days to complete, and pricing depends on the density of the
+                    space in need. To book this service please select the
+                    “other” option and describe your situation.
+                  </p>
+                </div>
                 <button
                   type="button"
                   class="btn btn--primary card__cta"
-                  data-service="A place for everything"
+                  data-service="A Kept Home"
                 >
                   Request service
                 </button>
@@ -166,15 +181,15 @@
             <div class="card__icon" aria-hidden="true">✿</div>
             <h3 class="card__title">A Healthy Garden</h3>
             <p class="card__short">
-              Mowing, edging, and seasonal tidying for sharp-looking grounds.
+              Mowing, edging, weeding, and pruning to keep things in check.
             </p>
             <div class="card__detail">
               <div class="card__detail-inner">
                 <p class="card__body">
-                  Mowing, edging, seasonal tidying, and a little extra fondness
-                  for the beds and borders. We keep your grounds looking sharp
-                  so the outside of your home is every bit as welcoming as the
-                  inside.
+                  Tasks that keep your garden under control — mowing, edging,
+                  weeding, pruning/shaping, wrangling invasives, and collecting
+                  debris for your green bin; so the outside of your home is
+                  every bit as welcoming as the inside.
                 </p>
                 <button
                   type="button"
@@ -341,10 +356,8 @@
             </span>
             <select name="service" id="service-select" required>
               <option value="" disabled selected>Choose a service…</option>
-              <option value="A Spotless Home">A Spotless Home</option>
-              <option value="A place for everything">
-                A place for everything
-              </option>
+              <option value="A Spotless House">A Spotless House</option>
+              <option value="A Kept Home">A Kept Home</option>
               <option value="A Healthy Garden">A Healthy Garden</option>
               <option value="Other">Other — Please describe</option>
             </select>

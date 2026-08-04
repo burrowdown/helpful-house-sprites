@@ -104,7 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // re-measure after late layout shifts (web fonts, images) that change the
     // track's scrollWidth — otherwise is-scrollable can be left stale
     window.addEventListener("load", update)
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(update)
+    if (document.fonts && document.fonts.ready)
+      document.fonts.ready.then(update)
     update()
     return update
   }
@@ -168,20 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
           buildPhoto(item.after, "After", item.title)
         )
 
-        const caption = document.createElement("figcaption")
-        caption.className = "ba__caption"
-        const h3 = document.createElement("h3")
-        h3.className = "ba__title"
-        h3.textContent = item.title
-        caption.append(h3)
-        if (item.caption) {
-          const p = document.createElement("p")
-          p.className = "ba__text"
-          p.textContent = item.caption
-          caption.append(p)
-        }
-
-        fig.append(pair, caption)
+        fig.append(pair)
         galleryGrid.append(fig)
       })
     }
@@ -197,11 +185,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (Array.isArray(items) && items.length) {
           render(items)
         } else {
-          galleryGrid.textContent = "Project photos are on their way — check back soon."
+          galleryGrid.textContent =
+            "Project photos are on their way — check back soon."
         }
       })
       .catch(() => {
-        galleryGrid.textContent = "Project photos are on their way — check back soon."
+        galleryGrid.textContent =
+          "Project photos are on their way — check back soon."
       })
       .finally(() => {
         // re-measure now that the gallery content is in the DOM (listeners
