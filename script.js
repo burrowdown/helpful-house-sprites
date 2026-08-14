@@ -56,7 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cta) {
       cta.addEventListener("click", () => {
         const service = card.dataset.service
-        if (serviceSelect && service) serviceSelect.value = service
+        if (serviceSelect && service) {
+          serviceSelect.value = service
+          // fire change so the form reveals the matching service section
+          serviceSelect.dispatchEvent(new Event("change", { bubbles: true }))
+        }
         if (contact) contact.scrollIntoView({ behavior: "smooth" })
       })
     }
@@ -210,6 +214,67 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("inquiry-form")
   const status = document.getElementById("form-status")
 
+  /* -------------------- Service-dependent questions ------------------- */
+  // The dropdown reveals a matching <fieldset data-service-section>. Every
+  // other section is hidden AND disabled — a disabled fieldset's fields are
+  // skipped by constraint validation and left out of submission, so the
+  // required questions in hidden sections never block the form. Some choices
+  // reveal a follow-up field (data-reveal="targetId"); those targets start
+  // hidden with their input disabled and are switched on when chosen.
+  let applyDynamic = () => {}
+
+  if (form && serviceSelect) {
+    const sections = [...form.querySelectorAll("[data-service-section]")]
+
+    const reveals = [...form.querySelectorAll("[data-reveal]")]
+      .map((trigger) => ({
+        trigger,
+        target: document.getElementById(trigger.dataset.reveal),
+      }))
+      .filter((r) => r.target)
+
+    // show/enable a reveal target only when its section is active and its
+    // trigger is checked; mirror that onto the target's fields
+    const syncReveal = ({ trigger, target }) => {
+      const section = target.closest("[data-service-section]")
+      const sectionOn = !section || (!section.hidden && !section.disabled)
+      const on = sectionOn && trigger.checked
+      target.hidden = !on
+      target.querySelectorAll("input, textarea, select").forEach((field) => {
+        field.disabled = !on
+        if ("revealRequired" in field.dataset) field.required = on
+      })
+    }
+
+    applyDynamic = () => {
+      const value = serviceSelect.value
+      sections.forEach((section) => {
+        const active = section.dataset.serviceSection === value
+        section.hidden = !active
+        // disabling the fieldset cascades to every control inside it
+        section.disabled = !active
+      })
+      // run after sections so conditional fields re-settle correctly
+      reveals.forEach(syncReveal)
+    }
+
+    serviceSelect.addEventListener("change", applyDynamic)
+
+    // a radio only fires "change" on the newly-checked input, so listen to the
+    // whole group; checkboxes just listen to themselves
+    reveals.forEach((reveal) => {
+      const group =
+        reveal.trigger.type === "radio"
+          ? form.querySelectorAll(`input[name="${reveal.trigger.name}"]`)
+          : [reveal.trigger]
+      group.forEach((el) =>
+        el.addEventListener("change", () => syncReveal(reveal))
+      )
+    })
+
+    applyDynamic()
+  }
+
   if (form && status) {
     form.addEventListener("submit", (event) => {
       event.preventDefault()
@@ -224,6 +289,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const name = form.elements.name.value.trim()
       form.reset()
       form.classList.remove("was-validated")
+      // reset() clears the dropdown back to the placeholder but fires no
+      // "change" event — re-collapse the service sections manually
+      applyDynamic()
 
       status.hidden = false
       status.textContent = `Thanks${

@@ -556,7 +556,11 @@ img {
 /* JS adds .is-clipped when a quote overflows and isn't scrolled to the end;
    fading the last couple of lines signals there's more to read */
 .quote blockquote.is-clipped {
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 3em), transparent);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 calc(100% - 3em),
+    transparent
+  );
   mask-image: linear-gradient(to bottom, #000 calc(100% - 3em), transparent);
 }
 
@@ -671,7 +675,9 @@ img {
   display: block;
   font-weight: 700;
   font-size: 0.9rem;
-  margin-bottom: 7px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  margin-top: 12px;
 }
 
 .req {
@@ -744,6 +750,206 @@ img {
   font-weight: 600;
 }
 
+/* ---------------------- Dynamic / structured fields --------------------- */
+
+/* hidden sections/reveals must stay hidden even if a rule below sets display */
+.form [hidden] {
+  display: none !important;
+}
+
+/* we style groups ourselves — strip the native fieldset chrome */
+.form fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  /* keep long option grids from forcing the fieldset wider than the form */
+  min-width: 0;
+}
+
+.form legend {
+  padding: 0;
+}
+
+/* the service-dependent block that appears under the dropdown */
+.form__section {
+  margin-bottom: 28px;
+  padding-top: 24px;
+  border-top: 1px dashed var(--line);
+}
+
+.form__section-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+/* one question (a radio/checkbox group, etc.) */
+.form__group {
+  margin-bottom: 20px;
+}
+
+/* a legend that should read like a field label */
+.form__group > .form__label {
+  margin-bottom: 12px;
+}
+
+/* small secondary note under a label */
+.form__hint {
+  display: block;
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+/* the playful "costs more" callout on the cleaning add-on */
+.form__warning {
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+/* checkbox / radio lists — wrap into columns when the list is long */
+.options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px 22px;
+}
+
+/* single column for options with longer, descriptive labels */
+.options--stack {
+  grid-template-columns: 1fr;
+  margin-bottom: 12px;
+}
+
+/* a short horizontal row (yes/no, etc.) */
+.options--inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 26px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.98rem;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.option input {
+  width: 18px;
+  height: 18px;
+  /* native control, tinted to the brand — simple + accessible */
+  accent-color: var(--primary);
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+/* compact, tappable choices: the 1–10 scale, consult days/times */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  padding: 9px 15px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+/* the real control drives state; keep it focusable but out of the layout */
+.chip input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+
+.chip:hover {
+  border-color: var(--accent);
+}
+
+.chip:has(input:checked) {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--surface);
+}
+
+.chip:has(input:focus-visible) {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+/* after a submit attempt, flag a required scale that wasn't answered (the
+   chip inputs are visually hidden, so the native invalid cue can't show) */
+.form.was-validated .chips:has(input:required:invalid) .chip {
+  border-color: #c0593f;
+}
+
+/* 1–10 scale = chips + end labels */
+.scale__ends {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* a follow-up field revealed by a checkbox/radio choice */
+.form__reveal {
+  margin-top: 12px;
+  padding-left: 14px;
+  border-left: 2px solid var(--accent);
+}
+
+.form__reveal .form__field {
+  margin-bottom: 0;
+}
+
+/* the "book a free consult" panel — the last thing before submit */
+.consult {
+  margin: 6px 0 26px;
+  padding: 26px;
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+}
+
+.consult__title {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  color: var(--primary-dark);
+  margin: 0 0 8px;
+}
+
+.consult__lede {
+  color: var(--muted);
+  margin: 0 0 18px;
+}
+
+.consult > :last-child {
+  margin-bottom: 0;
+}
+
 /* -------------------------------- Footer -------------------------------- */
 
 .footer {
@@ -774,6 +980,11 @@ img {
   margin: 0;
   font-size: 0.85rem;
   color: var(--footer-muted);
+}
+
+.footer__link {
+  text-decoration: none;
+  font-weight: 700;
 }
 
 /* ------------------------------ Responsive ------------------------------ */
