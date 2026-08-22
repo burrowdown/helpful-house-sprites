@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ----------------------- Before & after gallery ------------------- */
-  // Fetches gallery/manifest.json and renders each before/after pair as a
+  // Fetches content/gallery/manifest.json and renders each before/after pair as a
   // side-by-side block. The manifest is the single source of truth — adding
   // pairs is a content task (see notes.md), not a code change.
   const galleryGrid = document.getElementById("gallery-grid")
@@ -223,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const galleryCarousel = galleryGrid.closest(".carousel")
 
-    fetchJson("gallery/manifest.json")
+    fetchJson("content/gallery/manifest.json")
       .then((items) => {
         if (Array.isArray(items) && items.length) {
           render(items)
