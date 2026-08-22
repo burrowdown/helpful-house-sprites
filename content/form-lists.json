@@ -1,0 +1,66 @@
+{
+  "house-supplies": [
+    "Vacuum",
+    "Mop & bucket",
+    "Broom & dustpan",
+    "Microfiber cloths",
+    "All-purpose cleaner",
+    "Glass cleaner",
+    "Disinfectant / wipes",
+    "Scrub brushes & sponges",
+    "Rubber gloves",
+    "Step stool",
+    "Extendable duster",
+    "Trash bags",
+    "Fake stuff"
+  ],
+  "house-tasks": [
+    "Laundry & linens",
+    "Washing dishes",
+    "Fridge & pantry rotation",
+    "Making beds",
+    "Trash & recycling out",
+    "Tidying high-traffic areas",
+    "Watering houseplants",
+    "Sorting mail & paperwork",
+    {
+      "label": "Something else…",
+      "value": "Other",
+      "reveal": "kept-tasks-other"
+    }
+  ],
+  "garden-tools": [
+    "Lawn mower",
+    "String trimmer",
+    "Hedge shears",
+    "Pruners",
+    "Loppers",
+    "Rake",
+    "Leaf blower",
+    "Garden gloves",
+    "Wheelbarrow",
+    "Hand trowel",
+    "Garden hose",
+    "Shovel / spade"
+  ],
+  "garden-tasks": [
+    "Mowing",
+    "Edging",
+    "Weeding",
+    "Pruning & shaping",
+    {
+      "label": "Removing invasive plants",
+      "reveal": "garden-invasive-species"
+    },
+    "Raking & leaf cleanup",
+    "Planting",
+    "Mulching",
+    "Watering",
+    "Hauling debris to green bin",
+    {
+      "label": "Something else…",
+      "value": "Other",
+      "reveal": "garden-tasks-other"
+    }
+  ]
+}

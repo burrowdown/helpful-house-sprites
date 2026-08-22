@@ -1,6 +1,6 @@
 // Helpful House Sprites — demo site interactions
 // (1) mobile nav toggle  (2) service cards  (3) testimonials/gallery carousels
-// (4) before/after gallery loader  (5) fake inquiry-form submission
+// (4) content loaders (testimonials, form lists, gallery)  (5) inquiry form
 
 document.addEventListener("DOMContentLoaded", () => {
   /* ---------------------------- Mobile nav ---------------------------- */
@@ -121,9 +121,15 @@ document.addEventListener("DOMContentLoaded", () => {
     carouselUpdates.set(carousel, setupCarousel(carousel))
   })
 
+  const fetchJson = (url) =>
+    fetch(url).then((res) => {
+      if (!res.ok) throw new Error(`${url} ${res.status}`)
+      return res.json()
+    })
+
   // fade the bottom of any testimonial quote that overflows its max-height,
   // as a "there's more below" cue; clear it once scrolled to the end
-  document.querySelectorAll(".quote blockquote").forEach((bq) => {
+  const setupQuoteClip = (bq) => {
     const sync = () => {
       const overflowing = bq.scrollHeight > bq.clientHeight + 1
       const atBottom = bq.scrollTop + bq.clientHeight >= bq.scrollHeight - 1
@@ -134,7 +140,44 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("load", sync)
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync)
     sync()
-  })
+  }
+
+  /* ------------------------- Testimonials ----------------------------- */
+  // Quotes come from content/testimonials.json so they can be edited
+  // without touching the HTML.
+  const quotesTrack = document.querySelector(".quotes[data-carousel-track]")
+
+  if (quotesTrack) {
+    const quotesCarousel = quotesTrack.closest(".carousel")
+
+    fetchJson("content/testimonials.json")
+      .then((items) => {
+        if (!Array.isArray(items)) return
+        quotesTrack.replaceChildren(
+          ...items
+            .filter((item) => item && item.quote && item.name)
+            .map((item) => {
+              const figure = document.createElement("figure")
+              figure.className = "quote"
+
+              const bq = document.createElement("blockquote")
+              bq.textContent = `\u201c${item.quote}\u201d`
+
+              const cap = document.createElement("figcaption")
+              cap.textContent = `\u2014 ${item.name}`
+
+              figure.append(bq, cap)
+              setupQuoteClip(bq)
+              return figure
+            })
+        )
+      })
+      .catch(() => {})
+      .finally(() => {
+        const update = quotesCarousel && carouselUpdates.get(quotesCarousel)
+        if (update) update()
+      })
+  }
 
   /* ----------------------- Before & after gallery ------------------- */
   // Fetches gallery/manifest.json and renders each before/after pair as a
@@ -180,11 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const galleryCarousel = galleryGrid.closest(".carousel")
 
-    fetch("gallery/manifest.json")
-      .then((res) => {
-        if (!res.ok) throw new Error(`manifest ${res.status}`)
-        return res.json()
-      })
+    fetchJson("gallery/manifest.json")
       .then((items) => {
         if (Array.isArray(items) && items.length) {
           render(items)
@@ -226,12 +265,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (form && serviceSelect) {
     const sections = [...form.querySelectorAll("[data-service-section]")]
 
-    const reveals = [...form.querySelectorAll("[data-reveal]")]
-      .map((trigger) => ({
-        trigger,
-        target: document.getElementById(trigger.dataset.reveal),
-      }))
-      .filter((r) => r.target)
+    // collect on each run so checkboxes injected from form-lists.json
+    // (with data-reveal) are included
+    const collectReveals = () =>
+      [...form.querySelectorAll("[data-reveal]")]
+        .map((trigger) => ({
+          trigger,
+          target: document.getElementById(trigger.dataset.reveal),
+        }))
+        .filter((r) => r.target)
 
     // show/enable a reveal target only when its section is active and its
     // trigger is checked; mirror that onto the target's fields
@@ -255,24 +297,61 @@ document.addEventListener("DOMContentLoaded", () => {
         section.disabled = !active
       })
       // run after sections so conditional fields re-settle correctly
-      reveals.forEach(syncReveal)
+      collectReveals().forEach(syncReveal)
     }
 
     serviceSelect.addEventListener("change", applyDynamic)
 
-    // a radio only fires "change" on the newly-checked input, so listen to the
-    // whole group; checkboxes just listen to themselves
-    reveals.forEach((reveal) => {
-      const group =
-        reveal.trigger.type === "radio"
-          ? form.querySelectorAll(`input[name="${reveal.trigger.name}"]`)
-          : [reveal.trigger]
-      group.forEach((el) =>
-        el.addEventListener("change", () => syncReveal(reveal))
-      )
-    })
+    // delegate so statically declared reveals (radios) and JSON-built
+    // checkboxes both work; a radio only fires "change" on the newly-checked
+    // input, so re-sync the whole set
+    form.addEventListener("change", () => collectReveals().forEach(syncReveal))
 
     applyDynamic()
+  }
+
+  /* ---------------------- Form checkbox lists ------------------------- */
+  // Tools/tasks come from content/form-lists.json. A string is the label
+  // and value; an object can set a different value and/or open a follow-up
+  // field via { "label", "value", "reveal" }.
+  const checkboxOption = (name, item) => {
+    const isObject = item && typeof item === "object"
+    const labelText = isObject ? item.label : item
+    const value = isObject ? item.value || item.label : item
+    const reveal = isObject ? item.reveal : undefined
+
+    const label = document.createElement("label")
+    label.className = "option"
+
+    const input = document.createElement("input")
+    input.type = "checkbox"
+    input.name = name
+    input.value = value
+    if (reveal) input.dataset.reveal = reveal
+
+    const span = document.createElement("span")
+    span.textContent = labelText
+
+    label.append(input, span)
+    return label
+  }
+
+  if (form) {
+    fetchJson("content/form-lists.json")
+      .then((lists) => {
+        form.querySelectorAll("[data-list]").forEach((container) => {
+          const key = container.dataset.list
+          const items = lists[key]
+          if (!Array.isArray(items)) return
+          container.replaceChildren(
+            ...items
+              .filter((item) => item && (typeof item === "string" || item.label))
+              .map((item) => checkboxOption(key, item))
+          )
+        })
+      })
+      .catch(() => {})
+      .finally(() => applyDynamic())
   }
 
   /* 1–10 scales: chip radios on larger screens, a range slider on mobile.
