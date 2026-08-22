@@ -275,6 +275,58 @@ document.addEventListener("DOMContentLoaded", () => {
     applyDynamic()
   }
 
+  /* 1–10 scales: chip radios on larger screens, a range slider on mobile.
+     The radios stay the submitted/required control; the slider just checks
+     the matching radio so validation and FormData stay the same. */
+  const paintSlider = (slider) => {
+    const min = Number(slider.min) || 1
+    const max = Number(slider.max) || 10
+    const pct = ((Number(slider.value) - min) / (max - min)) * 100
+    slider.style.setProperty("--scale-pct", `${pct}%`)
+  }
+
+  document.querySelectorAll(".scale").forEach((scale) => {
+    const slider = scale.querySelector(".scale__slider input")
+    const output = scale.querySelector(".scale__value")
+    const radios = [...scale.querySelectorAll('.chips input[type="radio"]')]
+    if (!slider || !radios.length) return
+
+    const fromRadios = () => {
+      const checked = radios.find((radio) => radio.checked)
+      if (!checked) return
+      slider.value = checked.value
+      if (output) output.textContent = checked.value
+      paintSlider(slider)
+    }
+
+    const fromSlider = () => {
+      if (output) output.textContent = slider.value
+      paintSlider(slider)
+      const radio = radios.find((r) => r.value === slider.value)
+      if (radio && !radio.checked) {
+        radio.checked = true
+        radio.dispatchEvent(new Event("change", { bubbles: true }))
+      }
+    }
+
+    slider.addEventListener("input", fromSlider)
+    slider.addEventListener("click", fromSlider)
+    radios.forEach((radio) => radio.addEventListener("change", fromRadios))
+    paintSlider(slider)
+    fromRadios()
+  })
+
+  if (form) {
+    form.addEventListener("reset", () => {
+      form.querySelectorAll(".scale__slider input").forEach((slider) => {
+        slider.value = slider.defaultValue
+        const output = slider.parentElement.querySelector(".scale__value")
+        if (output) output.textContent = slider.value
+        paintSlider(slider)
+      })
+    })
+  }
+
   if (form && status) {
     form.addEventListener("submit", (event) => {
       event.preventDefault()

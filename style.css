@@ -658,17 +658,21 @@ img {
 .form {
   max-width: 640px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .form__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 18px;
 }
 
 .form__field {
-  display: block;
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .form__label {
@@ -676,8 +680,8 @@ img {
   font-weight: 700;
   font-size: 0.9rem;
   line-height: 1.4;
-  margin-bottom: 10px;
-  margin-top: 12px;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .req {
@@ -716,8 +720,18 @@ img {
   background-position: right 16px center;
 }
 
-/* dim the placeholder option while no service is chosen */
+/* dim the closed select while the placeholder is showing. Real options
+   get the body color so they don't inherit the mute; the disabled
+   placeholder keeps the muted look so it doesn't appear selectable. */
 .form select:invalid {
+  color: var(--muted);
+}
+
+.form select option:not(:disabled) {
+  color: var(--text);
+}
+
+.form select option:disabled {
   color: var(--muted);
 }
 
@@ -772,8 +786,7 @@ img {
 
 /* the service-dependent block that appears under the dropdown */
 .form__section {
-  margin-bottom: 28px;
-  padding-top: 24px;
+  padding-top: 6px;
   border-top: 1px dashed var(--line);
 }
 
@@ -781,17 +794,28 @@ img {
   font-family: var(--font-display);
   font-size: 1.5rem;
   color: var(--accent);
-  margin-bottom: 14px;
+  margin-bottom: 4px;
 }
 
 /* one question (a radio/checkbox group, etc.) */
 .form__group {
-  margin-bottom: 20px;
+  margin: 0;
+}
+
+.form__section > .form__group,
+.form__section > .form__field,
+.consult > .form__group,
+.consult > .form__field {
+  margin-bottom: 18px;
+}
+
+.form__section > :last-child {
+  margin-bottom: 0;
 }
 
 /* a legend that should read like a field label */
 .form__group > .form__label {
-  margin-bottom: 12px;
+  margin: 0 0 8px;
 }
 
 /* small secondary note under a label */
@@ -819,7 +843,6 @@ img {
 /* single column for options with longer, descriptive labels */
 .options--stack {
   grid-template-columns: 1fr;
-  margin-bottom: 12px;
 }
 
 /* a short horizontal row (yes/no, etc.) */
@@ -904,14 +927,123 @@ img {
   border-color: #c0593f;
 }
 
-/* 1–10 scale = chips + end labels */
-.scale__ends {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
+/* 1–10 scale: end labels sit beside the numbers when there's room */
+.scale {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.scale__end {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--muted);
+  line-height: 1.2;
+  max-width: 5.75rem;
+}
+
+.scale__end--high {
+  text-align: right;
+}
+
+.scale .chips {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.scale .chip {
+  min-width: 0;
+  width: 100%;
+  padding: 8px 0;
+}
+
+/* mobile stand-in for the chip row — hidden on larger screens */
+.scale__slider {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.scale__slider input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.scale__slider input[type="range"]:focus {
+  outline: none;
+  border: 0;
+  box-shadow: none;
+}
+
+.scale__slider input[type="range"]:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius: 999px;
+}
+
+.scale__slider input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--primary) var(--scale-pct, 44.44%),
+    var(--line) var(--scale-pct, 44.44%)
+  );
+}
+
+.scale__slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -10px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 1px 4px rgba(20, 20, 20, 0.25);
+}
+
+.scale__slider input[type="range"]::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.scale__slider input[type="range"]::-moz-range-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.scale__slider input[type="range"]::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 1px 4px rgba(20, 20, 20, 0.25);
+}
+
+.scale__value {
+  flex: 0 0 1.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.form.was-validated .scale:has(.chips input:required:invalid) .scale__slider input[type="range"]::-webkit-slider-thumb,
+.form.was-validated .scale:has(.chips input:required:invalid) .scale__slider input[type="range"]::-moz-range-thumb {
+  background: #c0593f;
 }
 
 /* a follow-up field revealed by a checkbox/radio choice */
@@ -927,7 +1059,7 @@ img {
 
 /* the "book a free consult" panel — the last thing before submit */
 .consult {
-  margin: 6px 0 26px;
+  margin: 0;
   padding: 26px;
   border: 1.5px solid var(--primary);
   border-radius: var(--radius);
@@ -938,7 +1070,7 @@ img {
   font-family: var(--font-display);
   font-size: 1.55rem;
   color: var(--primary-dark);
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 }
 
 .consult__lede {
@@ -1062,7 +1194,28 @@ img {
 @media (max-width: 540px) {
   .form__row {
     grid-template-columns: 1fr;
-    gap: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .scale .chips {
+    display: none;
+  }
+
+  .scale__slider {
+    display: flex;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .scale__end--low {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .scale__end--high {
+    grid-column: 3;
+    grid-row: 1;
   }
 }
 

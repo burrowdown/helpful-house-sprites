@@ -470,6 +470,7 @@
                 <span class="req">*</span>
               </legend>
               <div class="scale">
+                <span class="scale__end scale__end--low">Clean</span>
                 <div class="chips">
                   <label class="chip"
                     ><input
@@ -527,9 +528,18 @@
                     /><span>10</span></label
                   >
                 </div>
-                <div class="scale__ends">
-                  <span>1 · Clean</span><span>Dirty · 10</span>
+                <div class="scale__slider">
+                  <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value="5"
+                    aria-label="House rating, 1 clean to 10 dirty"
+                  />
+                  <output class="scale__value">5</output>
                 </div>
+                <span class="scale__end scale__end--high">Dirty</span>
               </div>
             </fieldset>
 
@@ -632,11 +642,7 @@
                 Which rooms or areas should we focus on?
                 <span class="form__optional">(optional)</span>
               </span>
-              <textarea
-                name="spotless-rooms"
-                rows="3"
-                placeholder="e.g. the kitchen, both bathrooms, and the entryway"
-              ></textarea>
+              <textarea name="spotless-rooms" rows="3"></textarea>
             </label>
           </fieldset>
 
@@ -677,6 +683,7 @@
                 <span class="req">*</span>
               </legend>
               <div class="scale">
+                <span class="scale__end scale__end--low">Tidy</span>
                 <div class="chips">
                   <label class="chip"
                     ><input
@@ -732,9 +739,18 @@
                     ></label
                   >
                 </div>
-                <div class="scale__ends">
-                  <span>1 · Tidy</span><span>Cluttered · 10</span>
+                <div class="scale__slider">
+                  <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value="5"
+                    aria-label="House rating, 1 tidy to 10 cluttered"
+                  />
+                  <output class="scale__value">5</output>
                 </div>
+                <span class="scale__end scale__end--high">Cluttered</span>
               </div>
             </fieldset>
 
@@ -835,6 +851,7 @@
                 />
                 <span>
                   Yes, add cleaning
+                  <!-- TODO -->
                   <span class="form__warning"
                     >— heads up, this bumps up the price!</span
                   >
@@ -849,7 +866,6 @@
                     name="kept-cleaning-details"
                     rows="3"
                     disabled
-                    placeholder="e.g. bathrooms and kitchen floors each visit"
                   ></textarea>
                 </label>
               </div>
@@ -1134,7 +1150,7 @@
                 name="other-details"
                 rows="5"
                 required
-                placeholder="Describe what you need — including the “A Place for Everything” organizing service."
+                placeholder="Describe what you need"
               ></textarea>
             </label>
           </fieldset>
@@ -1145,11 +1161,7 @@
               Any pets we should know about?
               <span class="form__optional">(optional)</span>
             </span>
-            <input
-              type="text"
-              name="pets"
-              placeholder="e.g. a friendly cat named Biscuit — or none"
-            />
+            <input type="text" name="pets" />
           </label>
 
           <fieldset class="form__group">
@@ -1180,9 +1192,7 @@
 
           <!-- Free consult scheduling — the last thing before submit -->
           <div class="consult">
-            <p class="consult__title">
-              Let's book your free 30-minute consult
-            </p>
+            <p class="consult__title">Let's book your free 30-minute consult</p>
             <p class="consult__lede">
               Every home starts with a quick, no-obligation visit. Tell us when
               you're generally free and we'll follow up to lock in a time.
@@ -1282,11 +1292,7 @@
                 Anything specific?
                 <span class="form__optional">(optional)</span>
               </span>
-              <input
-                type="text"
-                name="consult-notes"
-                placeholder="e.g. the week of the 12th, or after 3pm"
-              />
+              <input type="text" name="consult-notes" />
             </label>
           </div>
 
