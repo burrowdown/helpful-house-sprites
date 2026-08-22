@@ -28,3 +28,16 @@ For non-code files though, it's very easy to edit them right here on GitHub.
   - These commit messages are permanent and visible to anyone looking at this repository, so keep it professional! Something like "update cleaning products list" will do just fine.
 
 Once the file is saved or 'pushed', it will automatically trigger a deployment and you can see your changes on the site in a few minutes.
+
+### Adding photos
+
+Inside the `gallery` folder is a JSON file called `manifest.json`. That one is _automatically generated_, it is not necessary for you to update it yourself. When you add photos to the gallery folder, a script will run that will convert the images to a usable file format, re-build the manifest.json file, and commit those changes (which will trigger an automatic deployment and you will see your changes in a few minutes.)
+
+To add new pairs of photos:
+
+- Rename the files to `before` and `after` (preserve their original file extension)
+- Place the files inside a folder with a descriptive name
+- Navigate to the `gallery` directory on GitHub
+- Select `Add file` fron the top right corner, then `Upload files`
+- Drag and drop the entire folder (not each individual file!) into the upload field
+- Write a commit message and commit your changes
