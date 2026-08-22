@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Build gallery/manifest.json and generate web-optimized images.
+"""Build content/gallery/manifest.json and generate web-optimized images.
 
-For each gallery/<slug>/ folder that has a `before.*` and `after.*` SOURCE
+For each content/gallery/<slug>/ folder that has a `before.*` and `after.*` SOURCE
 image, this writes sRGB WebP derivatives (before.webp / after.webp) and points
 the manifest at them. Key properties:
 
@@ -39,7 +39,7 @@ except ImportError:
 
 from PIL import Image, ImageCms, ImageOps
 
-GALLERY_DIR = "gallery"
+GALLERY_DIR = "content/gallery"
 MANIFEST = os.path.join(GALLERY_DIR, "manifest.json")
 # Accepted SOURCE extensions. Note: .webp is intentionally excluded so it can
 # never collide with our own .webp output.
